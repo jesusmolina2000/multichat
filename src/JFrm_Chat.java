@@ -3,6 +3,7 @@ import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
 import javax.swing.DefaultListModel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 
 /*
@@ -20,6 +21,8 @@ public class JFrm_Chat extends javax.swing.JFrame {
     String user= null ;
     InetAddress grupo = null;
     MulticastSocket sock = null;
+    InetAddress ipPersonal = null;
+    
     /**
      * Creates new form JFrm_Chat
      */
@@ -107,6 +110,11 @@ public class JFrm_Chat extends javax.swing.JFrame {
 
         jLst_ususarios.setModel(preferido);
         jLst_ususarios.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jLst_ususarios.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLst_ususariosMouseClicked(evt);
+            }
+        });
         jScrollPane3.setViewportView(jLst_ususarios);
 
         getContentPane().add(jScrollPane3);
@@ -114,7 +122,7 @@ public class JFrm_Chat extends javax.swing.JFrame {
 
         jLbl_Usuario.setText("jLabel3");
         getContentPane().add(jLbl_Usuario);
-        jLbl_Usuario.setBounds(170, 20, 70, 14);
+        jLbl_Usuario.setBounds(170, 20, 70, 16);
 
         setSize(new java.awt.Dimension(473, 457));
         setLocationRelativeTo(null);
@@ -133,6 +141,18 @@ public class JFrm_Chat extends javax.swing.JFrame {
             ex.printStackTrace();
         }
     }//GEN-LAST:event_jBttn_Enviar_MensajeActionPerformed
+
+    private void jLst_ususariosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLst_ususariosMouseClicked
+        // Revisa si pasa doble click
+        JList list = (JList)evt.getSource();
+        if (evt.getClickCount() == 2) {
+            String usuario2 = list.getSelectedValue().toString();
+            if(usuario2 != user) {
+                jFrm_ChatPrivado ventanaChatPrivado = new jFrm_ChatPrivado(user, usuario2, this);
+                ventanaChatPrivado.setVisible(true);
+            }
+        }
+    }//GEN-LAST:event_jLst_ususariosMouseClicked
 
     /**
      * @param args the command line arguments

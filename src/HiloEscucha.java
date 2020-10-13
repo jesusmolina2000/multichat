@@ -43,6 +43,7 @@ public class HiloEscucha extends Thread {
 0:mensaje util
 1:usuario nuevo
 2:sesion terminada
+3:nuevo chat privado
      */
     public static void control(JFrm_Chat form, DatagramPacket mentrada, String userx) {
         try {
