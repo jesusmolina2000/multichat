@@ -22,12 +22,14 @@ public class jFrm_ChatPrivado extends javax.swing.JFrame {
     public String usuarioDestino;
     private JFrm_Chat formulatioPadre;
     
-    public jFrm_ChatPrivado(String usuario1, String usuario2, JFrm_Chat formularioPadre) {
+    public jFrm_ChatPrivado(String usuarioInicial, String usuarioDestino, JFrm_Chat formularioPadre) {
         initComponents();
-        this.usuarioDestino = usuario2;
-        this.usuarioInicial = usuario1;
+        this.usuarioInicial = usuarioInicial;
+        this.usuarioDestino = usuarioDestino;
+        
         this.formulatioPadre = formularioPadre;
-        jLabelUsuarios.setText(usuarioInicial + " - " + usuarioDestino);
+        jLabelUsuarios.setText(this.usuarioDestino);
+        jLabelTitulo.setText("Ventana Pertenece a " + this.usuarioInicial);
     }
 
     /**
@@ -47,13 +49,14 @@ public class jFrm_ChatPrivado extends javax.swing.JFrame {
         jTextPaneConversacion = new javax.swing.JTextPane();
         jTxtMensaje = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
+        jLabelTitulo = new javax.swing.JLabel();
 
         jTxtPn_conversacion.setEditable(false);
         jScrollPane2.setViewportView(jTxtPn_conversacion);
 
-        jLabel1.setText("Chat privado");
+        jLabel1.setText("Chat privado con:");
 
-        jLabelUsuarios.setText("users");
+        jLabelUsuarios.setText("user");
 
         jTextPaneConversacion.setEditable(false);
         jScrollPane1.setViewportView(jTextPaneConversacion);
@@ -72,6 +75,9 @@ public class jFrm_ChatPrivado extends javax.swing.JFrame {
             }
         });
 
+        jLabelTitulo.setFont(new java.awt.Font("Lucida Grande", 1, 18)); // NOI18N
+        jLabelTitulo.setText("Ventana Pertenece a");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -79,6 +85,7 @@ public class jFrm_ChatPrivado extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(37, 37, 37)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabelTitulo)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 326, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
@@ -88,12 +95,14 @@ public class jFrm_ChatPrivado extends javax.swing.JFrame {
                         .addComponent(jTxtMensaje, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton1)))
-                .addContainerGap(37, Short.MAX_VALUE))
+                .addContainerGap(15, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(24, 24, 24)
+                .addContainerGap()
+                .addComponent(jLabelTitulo)
+                .addGap(2, 2, 2)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(jLabelUsuarios))
@@ -103,7 +112,7 @@ public class jFrm_ChatPrivado extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTxtMensaje, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton1))
-                .addContainerGap(16, Short.MAX_VALUE))
+                .addContainerGap(10, Short.MAX_VALUE))
         );
 
         pack();
@@ -179,6 +188,7 @@ public class jFrm_ChatPrivado extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabelTitulo;
     private javax.swing.JLabel jLabelUsuarios;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;

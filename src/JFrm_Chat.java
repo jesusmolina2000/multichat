@@ -148,7 +148,7 @@ public class JFrm_Chat extends javax.swing.JFrame {
         if (evt.getClickCount() == 2) {
             String usuario2 = list.getSelectedValue().toString();
             if(!usuario2.equals(user)) {
-                if(!HiloEscucha.existeChatPrivadoConUsuario(usuario2)) {
+                if(!HiloEscucha.existeChatPrivadoEntreUsuarios(user, usuario2)) {
                     jFrm_ChatPrivado ventanaChatPrivado = new jFrm_ChatPrivado(user, usuario2, this);
                     HiloEscucha.agregarNuevaConversacionPrivada(ventanaChatPrivado);
                     ventanaChatPrivado.setVisible(true);

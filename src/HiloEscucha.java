@@ -71,18 +71,32 @@ public class HiloEscucha extends Thread {
                         form.preferido.addElement(listaUsuario.get(i));
                     }
                     break;
-                case 4:
-                    
+                case 3:
+                    String usuarioDestino = x[3];
+                    if(existeChatPrivadoEntreUsuarios(user, usuarioDestino)) {
+                        jFrm_ChatPrivado ventanaChatPrivado = obtenerChatPrivadoConUsuario(user);
+                        ventanaChatPrivado.requestFocus();
+                        ventanaChatPrivado.setVisible(true);
+                        ventanaChatPrivado.formatoConversacion(dato, usuarioDestino);
+                    } else {
+                        jFrm_ChatPrivado ventanaChatPrivado = new jFrm_ChatPrivado(user, usuarioDestino, form);
+                        HiloEscucha.agregarNuevaConversacionPrivada(ventanaChatPrivado);
+                        ventanaChatPrivado.setVisible(true);
+                        ventanaChatPrivado.formatoConversacion(dato, usuarioDestino);
+                    }
             }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
     
-    public static boolean existeChatPrivadoConUsuario(String usuario) {
+    public static boolean existeChatPrivadoEntreUsuarios(String usuarioInicial, String usuarioDestino) {
         for(int i = 0; i < listaConversacionesPrivadas.size(); i++) {
-            if(listaConversacionesPrivadas.get(i).usuarioDestino == usuario) {
-                return true;
+            jFrm_ChatPrivado ventana = listaConversacionesPrivadas.get(i);
+            if(usuarioDestino.equals(ventana.usuarioDestino)) {
+                if (usuarioInicial.equals(ventana.usuarioInicial)) {
+                    return true;
+                }
             }
         }
         return false;
