@@ -72,9 +72,9 @@ public class HiloEscucha extends Thread {
                     }
                     break;
                 case 3:
-                    String usuarioDestino = x[3];
+                    String usuarioDestino = x[3].trim();
                     if(existeChatPrivadoEntreUsuarios(user, usuarioDestino)) {
-                        jFrm_ChatPrivado ventanaChatPrivado = obtenerChatPrivadoConUsuario(user);
+                        jFrm_ChatPrivado ventanaChatPrivado = obtenerChatPrivadoConUsuario(user, usuarioDestino);
                         ventanaChatPrivado.requestFocus();
                         ventanaChatPrivado.setVisible(true);
                         ventanaChatPrivado.formatoConversacion(dato, usuarioDestino);
@@ -93,10 +93,8 @@ public class HiloEscucha extends Thread {
     public static boolean existeChatPrivadoEntreUsuarios(String usuarioInicial, String usuarioDestino) {
         for(int i = 0; i < listaConversacionesPrivadas.size(); i++) {
             jFrm_ChatPrivado ventana = listaConversacionesPrivadas.get(i);
-            if(usuarioDestino.equals(ventana.usuarioDestino)) {
-                if (usuarioInicial.equals(ventana.usuarioInicial)) {
-                    return true;
-                }
+            if(usuarioDestino.equals(ventana.usuarioDestino) && usuarioInicial.equals(ventana.usuarioInicial)) {
+                return true;
             }
         }
         return false;
@@ -106,9 +104,10 @@ public class HiloEscucha extends Thread {
         listaConversacionesPrivadas.add(nuevoChat);
     }
     
-    public static jFrm_ChatPrivado obtenerChatPrivadoConUsuario(String usuario) {
+    public static jFrm_ChatPrivado obtenerChatPrivadoConUsuario(String usuarioInicial, String usuarioDestino) {
         for(int i = 0; i < listaConversacionesPrivadas.size(); i++) {
-            if(listaConversacionesPrivadas.get(i).usuarioDestino == usuario) {
+            jFrm_ChatPrivado ventana = listaConversacionesPrivadas.get(i);
+            if(usuarioDestino.equals(ventana.usuarioDestino) && usuarioInicial.equals(ventana.usuarioInicial)) {
                 return listaConversacionesPrivadas.get(i);
             }
         }

@@ -151,10 +151,11 @@ public class JFrm_Chat extends javax.swing.JFrame {
                 if(!HiloEscucha.existeChatPrivadoEntreUsuarios(user, usuario2)) {
                     jFrm_ChatPrivado ventanaChatPrivado = new jFrm_ChatPrivado(user, usuario2, this);
                     HiloEscucha.agregarNuevaConversacionPrivada(ventanaChatPrivado);
+                    ventanaChatPrivado.requestFocus();
                     ventanaChatPrivado.setVisible(true);
                 }
                 else {
-                    jFrm_ChatPrivado ventanaChatPrivado = HiloEscucha.obtenerChatPrivadoConUsuario(usuario2);
+                    jFrm_ChatPrivado ventanaChatPrivado = HiloEscucha.obtenerChatPrivadoConUsuario(user, usuario2);
                     ventanaChatPrivado.requestFocus();
                     ventanaChatPrivado.setVisible(true);
                 }
