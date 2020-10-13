@@ -147,9 +147,17 @@ public class JFrm_Chat extends javax.swing.JFrame {
         JList list = (JList)evt.getSource();
         if (evt.getClickCount() == 2) {
             String usuario2 = list.getSelectedValue().toString();
-            if(usuario2 != user) {
-                jFrm_ChatPrivado ventanaChatPrivado = new jFrm_ChatPrivado(user, usuario2, this);
-                ventanaChatPrivado.setVisible(true);
+            if(!usuario2.equals(user)) {
+                if(!HiloEscucha.existeChatPrivadoConUsuario(usuario2)) {
+                    jFrm_ChatPrivado ventanaChatPrivado = new jFrm_ChatPrivado(user, usuario2, this);
+                    HiloEscucha.agregarNuevaConversacionPrivada(ventanaChatPrivado);
+                    ventanaChatPrivado.setVisible(true);
+                }
+                else {
+                    jFrm_ChatPrivado ventanaChatPrivado = HiloEscucha.obtenerChatPrivadoConUsuario(usuario2);
+                    ventanaChatPrivado.requestFocus();
+                    ventanaChatPrivado.setVisible(true);
+                }
             }
         }
     }//GEN-LAST:event_jLst_ususariosMouseClicked

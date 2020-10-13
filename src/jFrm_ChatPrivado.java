@@ -1,3 +1,8 @@
+
+import java.net.DatagramPacket;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -13,10 +18,16 @@ public class jFrm_ChatPrivado extends javax.swing.JFrame {
     /**
      * Creates new form jFrm_ChatPrivado
      */
-    public jFrm_ChatPrivado(String usuario1, String usuario2, JFrm_Chat formulatioPadre) {
+    public String usuarioInicial;
+    public String usuarioDestino;
+    private JFrm_Chat formulatioPadre;
+    
+    public jFrm_ChatPrivado(String usuario1, String usuario2, JFrm_Chat formularioPadre) {
         initComponents();
-        //jLabelUsuarios.setText(usuario1.concat(" - ".concat(usuario2)));
-        jLabelUsuarios.setText(usuario1+" - "+usuario2);
+        this.usuarioDestino = usuario2;
+        this.usuarioInicial = usuario1;
+        this.formulatioPadre = formularioPadre;
+        jLabelUsuarios.setText(usuarioInicial + " - " + usuarioDestino);
     }
 
     /**
@@ -33,25 +44,24 @@ public class jFrm_ChatPrivado extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabelUsuarios = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextPane1 = new javax.swing.JTextPane();
-        jTextField1 = new javax.swing.JTextField();
+        jTextPaneConversacion = new javax.swing.JTextPane();
+        jTxtMensaje = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
 
         jTxtPn_conversacion.setEditable(false);
         jScrollPane2.setViewportView(jTxtPn_conversacion);
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
         jLabel1.setText("Chat privado");
 
         jLabelUsuarios.setText("users");
 
-        jScrollPane1.setViewportView(jTextPane1);
+        jTextPaneConversacion.setEditable(false);
+        jScrollPane1.setViewportView(jTextPaneConversacion);
 
-        jTextField1.setToolTipText("Escriba mensaje...");
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        jTxtMensaje.setToolTipText("Escriba mensaje...");
+        jTxtMensaje.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                jTxtMensajeActionPerformed(evt);
             }
         });
 
@@ -75,7 +85,7 @@ public class jFrm_ChatPrivado extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabelUsuarios, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jTxtMensaje, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton1)))
                 .addContainerGap(37, Short.MAX_VALUE))
@@ -91,7 +101,7 @@ public class jFrm_ChatPrivado extends javax.swing.JFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTxtMensaje, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton1))
                 .addContainerGap(16, Short.MAX_VALUE))
         );
@@ -99,14 +109,38 @@ public class jFrm_ChatPrivado extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void jTxtMensajeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTxtMensajeActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }//GEN-LAST:event_jTxtMensajeActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        
+        try {
+            String mensaje= jTxtMensaje.getText()+System.getProperty("line.separator");
+            String mcompleto = usuarioInicial + ":3:" + jTxtMensaje.getText() + ":" + usuarioDestino;
+            byte[] m = mcompleto.getBytes();
+            DatagramPacket msalida= new DatagramPacket(m, m.length,this.formulatioPadre.grupo,6789);
+            formulatioPadre.sock.send(msalida);
+            formatoConversacion(mcompleto, usuarioDestino);
+            jTxtMensaje.setText("");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    public void formatoConversacion(String dato, String userx) throws Exception {
+        String[] x = dato.split(":");
+        String user = x[0].trim();
+        String mensaje = x[2].trim();
+        if (!userx.equals(user)) {
+            SimpleAttributeSet attrs = new SimpleAttributeSet();
+            StyleConstants.setBold(attrs, true);
+            this.jTextPaneConversacion.getStyledDocument().insertString(this.jTextPaneConversacion.getStyledDocument().getLength(), user + ": ", attrs);
+            StyleConstants.setBold(attrs, false);
+            this.jTextPaneConversacion.getStyledDocument().insertString(this.jTextPaneConversacion.getStyledDocument().getLength(), mensaje + System.getProperty("line.separator"), attrs);
+        }
+    }
+    
+    
     /**
      * @param args the command line arguments
      */
@@ -148,8 +182,8 @@ public class jFrm_ChatPrivado extends javax.swing.JFrame {
     private javax.swing.JLabel jLabelUsuarios;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextPane jTextPane1;
+    public javax.swing.JTextPane jTextPaneConversacion;
+    private javax.swing.JTextField jTxtMensaje;
     public javax.swing.JTextPane jTxtPn_conversacion;
     // End of variables declaration//GEN-END:variables
 }

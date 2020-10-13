@@ -20,10 +20,13 @@ public class HiloEscucha extends Thread {
     MulticastSocket sock = null;
     JFrm_Chat form = null;
     private static Vector<String> listaUsuario = new Vector<String>();
+    private static Vector<jFrm_ChatPrivado> listaConversacionesPrivadas;
 
     public HiloEscucha(MulticastSocket sock, JFrm_Chat form) {
         this.sock = sock;
         this.form = form;
+        
+        listaConversacionesPrivadas = new Vector<jFrm_ChatPrivado>();
     }
 
     public void run() {
@@ -43,7 +46,7 @@ public class HiloEscucha extends Thread {
 0:mensaje util
 1:usuario nuevo
 2:sesion terminada
-3:nuevo chat privado
+3:chat privado (el nombre del usuario al que se le va a mandar el mensaje sale en la tercera posición)
      */
     public static void control(JFrm_Chat form, DatagramPacket mentrada, String userx) {
         try {
@@ -68,10 +71,34 @@ public class HiloEscucha extends Thread {
                         form.preferido.addElement(listaUsuario.get(i));
                     }
                     break;
+                case 4:
+                    
             }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+    
+    public static boolean existeChatPrivadoConUsuario(String usuario) {
+        for(int i = 0; i < listaConversacionesPrivadas.size(); i++) {
+            if(listaConversacionesPrivadas.get(i).usuarioDestino == usuario) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public static void agregarNuevaConversacionPrivada(jFrm_ChatPrivado nuevoChat) {
+        listaConversacionesPrivadas.add(nuevoChat);
+    }
+    
+    public static jFrm_ChatPrivado obtenerChatPrivadoConUsuario(String usuario) {
+        for(int i = 0; i < listaConversacionesPrivadas.size(); i++) {
+            if(listaConversacionesPrivadas.get(i).usuarioDestino == usuario) {
+                return listaConversacionesPrivadas.get(i);
+            }
+        }
+        return null;
     }
 
     public static void formatoConversacion(JFrm_Chat form, String dato, String userx) throws Exception {
